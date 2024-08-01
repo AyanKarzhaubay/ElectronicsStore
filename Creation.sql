@@ -6,89 +6,71 @@ USE ElectronicsStore;
 
 CREATE TABLE Categories (
     CategoryID INT PRIMARY KEY IDENTITY(1,1),
-    CategoryName NVARCHAR(50) NOT NULL
+    CategoryName VARCHAR(50)
 );
+GO
 
 CREATE TABLE Products (
     ProductID INT PRIMARY KEY IDENTITY(1,1),
-    ProductName NVARCHAR(100) NOT NULL,
+    ProductName VARCHAR(100),
     CategoryID INT,
-    Price DECIMAL(10, 2) NOT NULL,
-    StockQuantity INT NOT NULL,
+    Price DECIMAL(10, 2),
+    StockQuantity INT,
     FOREIGN KEY (CategoryID) REFERENCES Categories(CategoryID)
 );
+GO
 
 CREATE TABLE Customers (
     CustomerID INT PRIMARY KEY IDENTITY(1,1),
-    FirstName NVARCHAR(50) NOT NULL,
-    LastName NVARCHAR(50) NOT NULL,
-    Email NVARCHAR(100),
-    Phone NVARCHAR(20),
-    Address NVARCHAR(255)
+    FirstName VARCHAR(50),
+    LastName VARCHAR(50),
+    Email VARCHAR(100),
+    Phone VARCHAR(15),
+    AddressID INT,
+    FOREIGN KEY (AddressID) REFERENCES Addresses(AddressID)
 );
+GO
 
 CREATE TABLE Orders (
     OrderID INT PRIMARY KEY IDENTITY(1,1),
     CustomerID INT,
-    OrderDate DATETIME NOT NULL DEFAULT GETDATE(),
-    TotalAmount DECIMAL(10, 2) NOT NULL,
+    OrderDate DATE,
+    TotalAmount DECIMAL(10, 2),
     FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID)
 );
+GO
 
 CREATE TABLE OrderDetails (
     OrderDetailID INT PRIMARY KEY IDENTITY(1,1),
     OrderID INT,
     ProductID INT,
-    Quantity INT NOT NULL,
-    UnitPrice DECIMAL(10, 2) NOT NULL,
+    Quantity INT,
+    UnitPrice DECIMAL(10, 2),
     FOREIGN KEY (OrderID) REFERENCES Orders(OrderID),
     FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
 );
+GO
 
-CREATE TABLE Suppliers (
-    SupplierID INT PRIMARY KEY IDENTITY(1,1),
-    SupplierName NVARCHAR(100) NOT NULL,
-    ContactName NVARCHAR(50),
-    ContactEmail NVARCHAR(100),
-    ContactPhone NVARCHAR(20),
-    Address NVARCHAR(255)
+CREATE TABLE Countries (
+    CountryID INT PRIMARY KEY IDENTITY(1,1),
+    CountryName VARCHAR(50)
 );
+GO
 
-CREATE TABLE Employees (
-    EmployeeID INT PRIMARY KEY IDENTITY(1,1),
-    FirstName NVARCHAR(50) NOT NULL,
-    LastName NVARCHAR(50) NOT NULL,
-    Email NVARCHAR(100),
-    Phone NVARCHAR(20),
-    HireDate DATETIME NOT NULL,
-    Position NVARCHAR(50),
-    Salary DECIMAL(10, 2)
+CREATE TABLE States (
+    StateID INT PRIMARY KEY IDENTITY(1,1),
+    StateName VARCHAR(50),
+    CountryID INT,
+    FOREIGN KEY (CountryID) REFERENCES Countries(CountryID)
 );
+GO
 
-CREATE TABLE Shippers (
-    ShipperID INT PRIMARY KEY IDENTITY(1,1),
-    ShipperName NVARCHAR(100) NOT NULL,
-    ContactName NVARCHAR(50),
-    ContactEmail NVARCHAR(100),
-    ContactPhone NVARCHAR(20)
+CREATE TABLE Addresses (
+    AddressID INT PRIMARY KEY IDENTITY(1,1),
+    Street VARCHAR(100),
+    City VARCHAR(50),
+    StateID INT,
+    PostalCode VARCHAR(10),
+    FOREIGN KEY (StateID) REFERENCES States(StateID)
 );
-
-CREATE TABLE Reviews (
-    ReviewID INT PRIMARY KEY IDENTITY(1,1),
-    ProductID INT,
-    CustomerID INT,
-    Rating INT CHECK (Rating >= 1 AND Rating <= 5),
-    Comment NVARCHAR(1000),
-    ReviewDate DATETIME NOT NULL DEFAULT GETDATE(),
-    FOREIGN KEY (ProductID) REFERENCES Products(ProductID),
-    FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID)
-);
-
-CREATE TABLE Payments (
-    PaymentID INT PRIMARY KEY IDENTITY(1,1),
-    OrderID INT,
-    PaymentDate DATETIME NOT NULL DEFAULT GETDATE(),
-    Amount DECIMAL(10, 2) NOT NULL,
-    PaymentMethod NVARCHAR(50) NOT NULL,
-    FOREIGN KEY (OrderID) REFERENCES Orders(OrderID)
-);
+GO
