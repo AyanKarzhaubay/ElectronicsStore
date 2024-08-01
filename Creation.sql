@@ -74,3 +74,76 @@ CREATE TABLE Addresses (
     FOREIGN KEY (StateID) REFERENCES States(StateID)
 );
 GO
+
+CREATE TABLE Suppliers (
+    SupplierID INT PRIMARY KEY IDENTITY(1,1),
+    SupplierName VARCHAR(100),
+    ContactName VARCHAR(50),
+    Phone VARCHAR(15),
+    Email VARCHAR(100),
+    AddressID INT,
+    FOREIGN KEY (AddressID) REFERENCES Addresses(AddressID)
+);
+GO
+
+CREATE TABLE ProductSuppliers (
+    ProductSupplierID INT PRIMARY KEY IDENTITY(1,1),
+    ProductID INT,
+    SupplierID INT,
+    SupplyPrice DECIMAL(10, 2),
+    FOREIGN KEY (ProductID) REFERENCES Products(ProductID),
+    FOREIGN KEY (SupplierID) REFERENCES Suppliers(SupplierID)
+);
+GO
+
+CREATE TABLE Reviews (
+    ReviewID INT PRIMARY KEY IDENTITY(1,1),
+    ProductID INT,
+    CustomerID INT,
+    Rating INT CHECK (Rating BETWEEN 1 AND 5),
+    Comment TEXT,
+    ReviewDate DATE,
+    FOREIGN KEY (ProductID) REFERENCES Products(ProductID),
+    FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID)
+);
+GO
+
+CREATE TABLE Payments (
+    PaymentID INT PRIMARY KEY IDENTITY(1,1),
+    OrderID INT,
+    PaymentDate DATE,
+    Amount DECIMAL(10, 2),
+    PaymentMethod VARCHAR(50),
+    FOREIGN KEY (OrderID) REFERENCES Orders(OrderID)
+);
+GO
+
+CREATE TABLE Shipping (
+    ShippingID INT PRIMARY KEY IDENTITY(1,1),
+    OrderID INT,
+    ShippingDate DATE,
+    ShippingMethod VARCHAR(50),
+    TrackingNumber VARCHAR(50),
+    FOREIGN KEY (OrderID) REFERENCES Orders(OrderID)
+);
+GO
+
+CREATE TABLE Discounts (
+    DiscountID INT PRIMARY KEY IDENTITY(1,1),
+    ProductID INT,
+    DiscountPercentage DECIMAL(5, 2),
+    StartDate DATE,
+    EndDate DATE,
+    FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
+);
+GO
+
+CREATE TABLE Wishlists (
+    WishlistID INT PRIMARY KEY IDENTITY(1,1),
+    CustomerID INT,
+    ProductID INT,
+    DateAdded DATE,
+    FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID),
+    FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
+);
+GO
