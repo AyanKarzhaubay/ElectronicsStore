@@ -147,3 +147,104 @@ CREATE TABLE Wishlists (
     FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
 );
 GO
+
+CREATE TABLE Employees (
+    EmployeeID INT PRIMARY KEY IDENTITY(1,1),
+    FirstName VARCHAR(50),
+    LastName VARCHAR(50),
+    Email VARCHAR(100),
+    Phone VARCHAR(15),
+    HireDate DATE,
+    Position VARCHAR(50),
+    Salary DECIMAL(10, 2),
+    AddressID INT,
+    FOREIGN KEY (AddressID) REFERENCES Addresses(AddressID)
+);
+GO
+
+CREATE TABLE ProductReturns (
+    ReturnID INT PRIMARY KEY IDENTITY(1,1),
+    OrderID INT,
+    ProductID INT,
+    ReturnDate DATE,
+    Quantity INT,
+    Reason TEXT,
+    FOREIGN KEY (OrderID) REFERENCES Orders(OrderID),
+    FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
+);
+GO
+
+CREATE TABLE PurchaseOrders (
+    PurchaseOrderID INT PRIMARY KEY IDENTITY(1,1),
+    SupplierID INT,
+    OrderDate DATE,
+    TotalAmount DECIMAL(10, 2),
+    FOREIGN KEY (SupplierID) REFERENCES Suppliers(SupplierID)
+);
+GO
+
+CREATE TABLE PurchaseOrderDetails (
+    PurchaseOrderDetailID INT PRIMARY KEY IDENTITY(1,1),
+    PurchaseOrderID INT,
+    ProductID INT,
+    Quantity INT,
+    UnitPrice DECIMAL(10, 2),
+    FOREIGN KEY (PurchaseOrderID) REFERENCES PurchaseOrders(PurchaseOrderID),
+    FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
+);
+GO
+
+CREATE TABLE Inventory (
+    InventoryID INT PRIMARY KEY IDENTITY(1,1),
+    ProductID INT,
+    Quantity INT,
+    LastUpdated DATE,
+    FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
+);
+GO
+
+CREATE TABLE Coupons (
+    CouponID INT PRIMARY KEY IDENTITY(1,1),
+    Code VARCHAR(50),
+    DiscountPercentage DECIMAL(5, 2),
+    ExpiryDate DATE,
+    MinPurchaseAmount DECIMAL(10, 2)
+);
+GO
+
+CREATE TABLE CustomerSupportTickets (
+    TicketID INT PRIMARY KEY IDENTITY(1,1),
+    CustomerID INT,
+    IssueDescription TEXT,
+    TicketStatus VARCHAR(50),
+    CreationDate DATE,
+    ResolutionDate DATE,
+    FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID)
+);
+GO
+
+CREATE TABLE ProductTags (
+    ProductTagID INT PRIMARY KEY IDENTITY(1,1),
+    ProductID INT,
+    Tag VARCHAR(50),
+    FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
+);
+GO
+
+CREATE TABLE Events (
+    EventID INT PRIMARY KEY IDENTITY(1,1),
+    EventName VARCHAR(100),
+    StartDate DATE,
+    EndDate DATE,
+    Description TEXT
+);
+GO
+
+CREATE TABLE EventProductAssociations (
+    EventProductAssociationID INT PRIMARY KEY IDENTITY(1,1),
+    EventID INT,
+    ProductID INT,
+    FOREIGN KEY (EventID) REFERENCES Events(EventID),
+    FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
+);
+GO
